@@ -1,0 +1,2 @@
+class HasTag < ApplicationRecord
+end

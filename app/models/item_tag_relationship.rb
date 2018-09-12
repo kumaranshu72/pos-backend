@@ -1,0 +1,2 @@
+class ItemTagRelationship < ApplicationRecord
+end
