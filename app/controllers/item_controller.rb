@@ -84,7 +84,8 @@ class ItemController < ApplicationController
       bill_item = BillItem.where(bill_id: params[:order_id])
       item = []
       bill_item.each { |t|
-        item_hash = {:item_id => t[:item_id],:unit_price => t[:unit_price],:qty => t[:item_qty]}
+        item_name = Item.find_by(id: t[:item_id])
+        item_hash = {:item_name => item_name[:name],:unit_price => t[:unit_price],:qty => t[:item_qty]}
         item.push(item_hash)
       }
       result = {:bill_amount => bill[:bill_amount], :service_charge => bill[:service_charge], :grand_total=> bill[:grand_total],:create_at=>bill[:created_at],:items=> item}
