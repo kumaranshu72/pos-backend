@@ -96,7 +96,7 @@ class ItemController < ApplicationController
   private
 
      def allow_cross_domain_ajax
-        headers['Access-Control-Allow-Origin'] = '*'
+        headers['Access-Control-Allow-Origin'] = '*' #ideally this should be domain specific but we have kept it * for now
         headers['Access-Control-Request-Method'] = 'GET ,POST'
   end
 end
