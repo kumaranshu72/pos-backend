@@ -3,7 +3,7 @@ class ItemController < ApplicationController
   before_action :allow_cross_domain_ajax
 
   def create
-    @item = Item.new(item_params)
+    @item = Item.new(name:params[:name],price:params[:price])
     if @item.save
       params[:hashtag].each { |t|
         hashtag = HashTag.find_by(name: t)
@@ -69,9 +69,6 @@ class ItemController < ApplicationController
   end
 
   private
-     def item_params
-       params.require(:item).permit(:name, :price, :hashtag)
-     end
 
      def allow_cross_domain_ajax
         headers['Access-Control-Allow-Origin'] = '*'
