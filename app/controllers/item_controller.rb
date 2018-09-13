@@ -2,6 +2,29 @@ class ItemController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :allow_cross_domain_ajax
 
+  def list_items
+    item = Item.all
+    if item.nil?
+      render status: 404, json: {Status: "No Items Present"}.to_json
+    else
+      item_array = []
+      item.each { |t|
+        item_hash = {:id=>t[:id],:name=>t[:name]}
+        item_array.push(item_hash)
+      }
+      render status: 200, json: {Status: item_array}.to_json
+    end
+  end
+
+  def list_bills
+    bill = Bill.all
+    if bill.nil?
+      render status: 404, json: {Status: "No Items Present"}.to_json
+    else
+      render status: 200, json: {Status: bill}.to_json
+    end
+  end
+
   def create
     @item = Item.new(name:params[:name],price:params[:price])
     if @item.save
@@ -29,13 +52,14 @@ class ItemController < ApplicationController
     end
   end
 
+
   def generate_bill
     bill_amt = 0
     items_array = []
-    params[:items].each { |t|
-      item = Item.find_by(id: t[:item_id])
-      bill_amt += item[:price]*t[:qty].to_f
-      item_hash = {:item_id=> t[:item_id],:unit_price=> item[:price], :qty=> t[:qty]}
+    params[:items].each { |key,value|
+      item = Item.find_by(id: value[:item_id])
+      bill_amt += item[:price]*value[:qty].to_f
+      item_hash = {:item_id=> value[:item_id],:unit_price=> item[:price], :qty=> value[:qty]}
       items_array.push(item_hash)
     }
     svc_charge = bill_amt * 0.15

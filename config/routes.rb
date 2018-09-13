@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   get '/search' => 'item#search'
   post '/generateBill' => 'item#generate_bill'
   get '/showBill' => 'item#show_bill'
+  get '/listItems' => 'item#list_items'
+  get '/listBills' => 'item#list_bills'
 end
