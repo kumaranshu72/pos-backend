@@ -25,7 +25,7 @@ class ItemController < ApplicationController
     if result.any?
       render status: 200, json: {Status: result}.to_json
     else
-      render status: 200, json: {Status: "Resullt not found"}.to_json
+      render status: 404, json: {Status: "Resullt not found"}.to_json
     end
   end
 
@@ -47,9 +47,25 @@ class ItemController < ApplicationController
     }
        render status: 200,json: {Message: "Bill Generated Sucessfully"}.to_json
     else
-      render status: 200,json: {Message: "Something somewhere went terribly wrong1"}.to_json
+      render status: 500,json: {Message: "Something somewhere went terribly wrong1"}.to_json
     end
 
+  end
+
+  def show_bill
+    bill = Bill.find_by(id: params[:order_id])
+    if bill.nil?
+      render status: 404,json: {Message: "No bills found"}
+    else
+      bill_item = BillItem.where(bill_id: params[:order_id])
+      item = []
+      bill_item.each { |t|
+        item_hash = {:item_id => t[:item_id],:unit_price => t[:unit_price],:qty => t[:item_qty]}
+        item.push(item_hash)
+      }
+      result = {:bill_amount => bill[:bill_amount], :service_charge => bill[:service_charge], :grand_total=> bill[:grand_total],:create_at=>bill[:created_at],:items=> item}
+      render status: 200,json: {bill: result}
+    end
   end
 
   private
