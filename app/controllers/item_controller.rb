@@ -19,7 +19,7 @@ class ItemController < ApplicationController
   def list_bills
     bill = Bill.all
     if bill.nil?
-      render status: 404, json: {Status: "No Items Present"}.to_json
+      render status: 404, json: {Status: "No Bills Present"}.to_json
     else
       render status: 200, json: {Status: bill}.to_json
     end
@@ -48,7 +48,7 @@ class ItemController < ApplicationController
     if result.any?
       render status: 200, json: {Status: result}.to_json
     else
-      render status: 404, json: {Status: "Resullt not found"}.to_json
+      render status: 404, json: {Status: "Result not found"}.to_json
     end
   end
 

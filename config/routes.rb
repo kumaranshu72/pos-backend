@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  post '/create' => 'item#create'
+  post '/items/add' => 'item#create'
   get '/search' => 'item#search'
-  post '/generateBill' => 'item#generate_bill'
-  get '/showBill' => 'item#show_bill'
-  get '/listItems' => 'item#list_items'
-  get '/listBills' => 'item#list_bills'
+  post '/bills/add' => 'item#generate_bill'
+  get '/bill' => 'item#show_bill'
+  get '/items' => 'item#list_items'
+  get '/bills' => 'item#list_bills'
 end
