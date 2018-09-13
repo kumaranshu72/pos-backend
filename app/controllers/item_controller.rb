@@ -44,7 +44,7 @@ class ItemController < ApplicationController
   end
 
   def search
-    result = Item.find_by_sql(["SELECT * FROM items WHERE id = (SELECT items.id FROM items LEFT JOIN item_tag_relationships ON item_tag_relationships.item_id = items.id JOIN hash_tags ON hash_tags.id = item_tag_relationships.tag_id WHERE hash_tags.name = ?)",params[:key]])
+    result = Item.find_by_sql(["SELECT * FROM items WHERE id = (SELECT items.id FROM items LEFT JOIN item_tag_relationships ON item_tag_relationships.item_id = items.id JOIN hash_tags ON hash_tags.id = item_tag_relationships.tag_id WHERE hash_tags.name = ?)", ActionController::Base.helpers.sanitize(params[:key])])
     if result.any?
       render status: 200, json: {Status: result}.to_json
     else
