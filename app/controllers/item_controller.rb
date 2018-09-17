@@ -55,19 +55,23 @@ class ItemController < ApplicationController
 
   def generate_bill
     bill_amt = 0
-    items_array = []
+    items_array = {}
     params[:items].each { |key,value|
       item = Item.find_by(id: value[:item_id])
       bill_amt += item[:price]*value[:qty].to_f
-      item_hash = {:item_id=> value[:item_id],:unit_price=> item[:price], :qty=> value[:qty]}
-      items_array.push(item_hash)
+      if items_array.key?(value[:item_id])
+        items_array[value[:item_id]][:qty] = items_array[value[:item_id]][:qty].to_i + value[:qty].to_i
+      else
+        item_hash = {:item_id=> value[:item_id],:unit_price=> item[:price], :qty=> value[:qty]}
+        items_array[value[:item_id]] = item_hash
+      end
     }
     svc_charge = bill_amt * 0.15
     total = svc_charge + bill_amt
     bill = Bill.create(bill_amount: bill_amt,service_charge: svc_charge,grand_total: total)
     if bill
-      items_array.each { |i|
-        bill_item = BillItem.create(bill_id: Bill.last.id,item_id: i[:item_id],item_qty: i[:qty],unit_price: i[:unit_price])
+      items_array.each { |i,value|
+        bill_item = BillItem.create(bill_id: Bill.last.id,item_id: value[:item_id],item_qty: value[:qty],unit_price: value[:unit_price])
     }
        render status: 200,json: {Message: "Bill Generated Sucessfully"}.to_json
     else
