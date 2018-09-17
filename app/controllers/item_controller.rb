@@ -39,7 +39,7 @@ class ItemController < ApplicationController
       }
       render status: 200, json: {Status: "Item created Successfully"}.to_json
     else
-      render status: 500, json: {Status: "Bad Request"}.to_json
+      render status: 500, json: {Status: "Bad Request or Item with Same Already Present"}.to_json
     end
   end
 
