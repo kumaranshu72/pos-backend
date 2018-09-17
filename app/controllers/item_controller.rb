@@ -57,6 +57,10 @@ class ItemController < ApplicationController
     bill_amt = 0
     items_array = {}
     params[:items].each { |key,value|
+      if value[:qty].to_i <= 0
+        render status: 500,json: {Message: "Quantity should be greater than 0"}.to_json
+        return
+      end
       item = Item.find_by(id: value[:item_id])
       bill_amt += item[:price]*value[:qty].to_f
       if items_array.key?(value[:item_id])
