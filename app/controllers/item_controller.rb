@@ -107,4 +107,8 @@ class ItemController < ApplicationController
         headers['Access-Control-Allow-Origin'] = '*' #ideally this should be domain specific but we have kept it * for now
         headers['Access-Control-Request-Method'] = 'GET ,POST'
   end
+
+  def santizeparams param
+       res = ActionController::Base.helpers.sanitize(param)
+     end
 end
